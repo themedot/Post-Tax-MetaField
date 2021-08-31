@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Post nad Taxonomy Selector
+Plugin Name: Post and Taxonomy Selector
 Plugin URI: http://example.com/
 Description: This is a post tax meta field plugin
 Version: 1.0
@@ -39,6 +39,20 @@ add_action('admin_menu','ptmf_add_metabox');
 function ptmf_display_metabox(){
     
      wp_nonce_field( 'ptmf_posts', 'ptmf_posts_nonce');
+     $args = array(
+        'post_type' => 'post',
+        'post_per_page' => -1
+     );
+
+     $dropdown_list = '';
+     $_posts = new wp_query($args);
+     while($_posts->have_posts()){
+        $_posts->the_post();
+        $dropdown_list .= sprintf("<option value='%s'>%s</option>",get_the_ID(),get_the_title());
+     }
+     wp_reset_query();
+
+
      $label = __("Select Posts","post-tax-metafield");
      $metabox_html = <<<EOD
         <div class="fields">
@@ -47,8 +61,9 @@ function ptmf_display_metabox(){
                     <label>{$label}</label>
                 </div>
                 <div class="input_c">
-                    <select name="ptmf_posts" id="ptmf_posts>
+                    <select name="ptmf_posts" id="ptmf_posts">
                         <option value="0">{$label}</option>
+                        {$dropdown_list}
                     </select>
                 </div>
             </div>
