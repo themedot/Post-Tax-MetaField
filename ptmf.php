@@ -36,11 +36,11 @@ function ptmf_add_metabox(){
 add_action('admin_menu','ptmf_add_metabox');
 
 function ptmf_save_meta($post_id){
-    if (!ptmf_is_secured('ptmf_save_meta','save_post',$post_id)) {
+    if (!ptmf_is_secured('ptmf_posts_nonce','ptmf_posts',$post_id)) {
         return $post_id;
     }
     $selected_post_id = $_POST['ptmf_posts'];
-    if($selected_post_id>0){
+    if($selected_post_id > 0){
         update_post_meta( $post_id, 'ptmf_selected_post', $selected_post_id );
     }
 }
@@ -48,7 +48,9 @@ add_action( 'save_post', 'ptmf_save_meta');
 
 function ptmf_display_metabox($post){
     $selected_post_id = get_post_meta($post->ID,'ptmf_selected_post',true);
+    echo $selected_post_id;
      wp_nonce_field( 'ptmf_posts', 'ptmf_posts_nonce');
+
      $args = array(
         'post_type' => 'post',
         'post_per_page' => -1
@@ -57,8 +59,12 @@ function ptmf_display_metabox($post){
      $dropdown_list = '';
      $_posts = new wp_query($args);
      while($_posts->have_posts()){
+        $extra = "";
         $_posts->the_post();
-        $dropdown_list .= sprintf("<option value='%s'>%s</option>",get_the_ID(),get_the_title());
+        if (get_the_ID() == $selected_post_id) {
+            $extra = 'selected';
+        }
+        $dropdown_list .= sprintf("<option %s value='%s'>%s</option>",$extra,get_the_ID(),get_the_title());
      }
      wp_reset_query();
 
