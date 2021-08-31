@@ -25,7 +25,6 @@ function ptmf_admin_assets()
 }
 add_action( 'admin_enqueue_scripts','ptmf_admin_assets');
 
-
 function ptmf_add_metabox(){
     add_meta_box(
         'ptmf_select_posts_mb',
@@ -36,8 +35,19 @@ function ptmf_add_metabox(){
 }
 add_action('admin_menu','ptmf_add_metabox');
 
-function ptmf_display_metabox(){
-    
+function ptmf_save_meta($post_id){
+    if (!ptmf_is_secured('ptmf_save_meta','save_post',$post_id)) {
+        return $post_id;
+    }
+    $selected_post_id = $_POST['ptmf_posts'];
+    if($selected_post_id>0){
+        update_post_meta( $post_id, 'ptmf_selected_post', $selected_post_id );
+    }
+}
+add_action( 'save_post', 'ptmf_save_meta');
+
+function ptmf_display_metabox($post){
+    $selected_post_id = get_post_meta($post->ID,'ptmf_selected_post',true);
      wp_nonce_field( 'ptmf_posts', 'ptmf_posts_nonce');
      $args = array(
         'post_type' => 'post',
@@ -75,9 +85,33 @@ function ptmf_display_metabox(){
 }
 
 
+if (!function_exists('ptmf_is_secured')) {
+    function ptmf_is_secured($nonce_field, $action, $post_id)
+    {
+        $nonce = isset($_POST[$nonce_field]) ? $_POST[$nonce_field]:"";
 
+        if ($nonce == '') {
+            return false;
+        }
 
+        if (!wp_verify_nonce($nonce, $action)) {
+            return false;
+        }
 
+        if (!current_user_can('edit_post', $post_id)) {
+            return false;
+        }
+
+        if (wp_is_post_autosave($post_id)) {
+            return false;
+        }
+
+        if (wp_is_post_revision($post_id)) {
+            return false;
+        }
+        return true;
+    }
+}
 
 
 
