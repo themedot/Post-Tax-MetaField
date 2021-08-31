@@ -15,4 +15,4 @@ Domain Path: /languages
 function ptmf_load_texdomain(){
     load_plugin_textdomain('post-tax-metafield',false,dirname(__FILE__)."/languages");
 }
-add_action('plugin_loaded','ptmf_load_texdomain');
+add_action('plugin_loaded','ptmf_load_texdomain') ;
