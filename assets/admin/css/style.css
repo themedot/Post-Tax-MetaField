@@ -17,6 +17,9 @@
     width: 85%;
     float: left;
 }
+.input_c select {
+    min-width: 200px;
+}
 
 .input_c button{
     height: 30px;

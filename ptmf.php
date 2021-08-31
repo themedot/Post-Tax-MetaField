@@ -48,7 +48,7 @@ add_action( 'save_post', 'ptmf_save_meta');
 
 function ptmf_display_metabox($post){
     $selected_post_id = get_post_meta($post->ID,'ptmf_selected_post',true);
-    echo $selected_post_id;
+    print_r($selected_post_id);
      wp_nonce_field( 'ptmf_posts', 'ptmf_posts_nonce');
 
      $args = array(
@@ -61,7 +61,7 @@ function ptmf_display_metabox($post){
      while($_posts->have_posts()){
         $extra = "";
         $_posts->the_post();
-        if (get_the_ID() == $selected_post_id) {
+        if (in_array(get_the_ID(),$selected_post_id)) {
             $extra = 'selected';
         }
         $dropdown_list .= sprintf("<option %s value='%s'>%s</option>",$extra,get_the_ID(),get_the_title());
@@ -77,7 +77,7 @@ function ptmf_display_metabox($post){
                     <label>{$label}</label>
                 </div>
                 <div class="input_c">
-                    <select name="ptmf_posts" id="ptmf_posts">
+                    <select multiple="multiple" name="ptmf_posts[]" id="ptmf_posts">
                         <option value="0">{$label}</option>
                         {$dropdown_list}
                     </select>
