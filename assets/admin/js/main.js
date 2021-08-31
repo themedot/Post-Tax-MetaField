@@ -1,7 +1,8 @@
 var frame, gframe;
 ;(function($){
     $(document).ready(function() {
-      $('.js-example-basic-single').select2();
+
+      $('.js-example-basic-multiple').select2();
 
       var imageUrl = $("#omb_image_url").val();
       if(imageUrl){
@@ -49,7 +50,7 @@ var frame, gframe;
           return false;
         });
 
-// this section for gallery
+ // this section for gallery
         $("#upload_images").on("click",function(){
 
           if ( gframe ) {
@@ -87,7 +88,7 @@ var frame, gframe;
           return false;
         });
 
-        $('.js-example-basic-single').select2();
+        
 
       } );
 })(jQuery);
