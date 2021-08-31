@@ -22,6 +22,9 @@ add_action('plugin_loaded','ptmf_load_texdomain');
 function ptmf_admin_assets()
 {
     wp_enqueue_style( 'omb-admin-style', plugin_dir_url(__FILE__)."assets/admin/css/style.css", null, time());    
+    wp_enqueue_style( 'chosen-min-css', "//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", null, time());
+        
+    wp_enqueue_script('chosen-min-js', "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",array( 'jquery' ),time(),true);  
 }
 add_action( 'admin_enqueue_scripts','ptmf_admin_assets');
 
@@ -77,7 +80,7 @@ function ptmf_display_metabox($post){
                     <label>{$label}</label>
                 </div>
                 <div class="input_c">
-                    <select multiple="multiple" name="ptmf_posts[]" id="ptmf_posts">
+                    <select class="js-example-basic-single" multiple="multiple" name="ptmf_posts[]" id="ptmf_posts">
                         <option value="0">{$label}</option>
                         {$dropdown_list}
                     </select>

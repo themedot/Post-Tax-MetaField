@@ -1,6 +1,7 @@
 var frame, gframe;
 ;(function($){
     $(document).ready(function() {
+      $('.js-example-basic-single').select2();
 
       var imageUrl = $("#omb_image_url").val();
       if(imageUrl){
@@ -85,6 +86,9 @@ var frame, gframe;
           gframe.open();
           return false;
         });
+
+        $('.js-example-basic-single').select2();
+
       } );
 })(jQuery);
 
